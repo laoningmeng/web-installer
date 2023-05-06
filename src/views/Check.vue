@@ -25,13 +25,47 @@
     </div>
   </div>
 </template>
+<script setup name="Check">
+import { CheckCircleOutlined,ExclamationCircleOutlined,CloseCircleOutlined } from '@ant-design/icons-vue';
+import { useStore } from '@/stores/store'
+const data = [{
+  title: 'node',
+}, {
+  title: 'go',
+}, {
+  title: 'redis',
+}, {
+  title: 'mysql',
+}];
 
-<script>
-export default {
-  name: "Check"
-}
+const store = useStore();
+store.setCurStep(3)
+
+
 </script>
+<style>
+.site-layout-content {
+  min-height: 280px;
+  padding: 24px;
+  background: #fff;
+}
+.logo{
+  color: #fff;
+  font-size: 18px;
+}
+#components-layout-demo-top .logo {
+  float: left;
+  width: 120px;
+  height: 31px;
+  margin: 16px 24px 16px 0;
+  background: rgba(255, 255, 255, 0.3);
+}
+.ant-row-rtl #components-layout-demo-top .logo {
+  float: right;
+  margin: 16px 0 16px 24px;
+}
 
-<style scoped>
-
+[data-theme='dark'] .site-layout-content {
+  background: #141414;
+}
 </style>

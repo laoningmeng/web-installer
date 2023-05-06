@@ -65,8 +65,4 @@ export default {
 .logo{
   color:white;
 }
-*{
-  margin:0px;
-  padding: 0px;
-}
 </style>
