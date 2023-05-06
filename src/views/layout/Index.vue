@@ -7,7 +7,7 @@
       <a-card  :bordered="false"  style="padding: 20px;">
         <div :style="{ background: '#fff', minHeight: '100px'}" aclass="height-100">
           <a-row type="flex" justify="space-around" style="margin-top:20px">
-            <a-steps :current="current_step">
+            <a-steps :current="store.current_step">
               <a-step v-for="step in steps" :title="step.title"  />
             </a-steps>
           </a-row>
@@ -24,41 +24,31 @@
   </a-layout>
 </template>
 
-<script>
-export default {
-  name: "Layout",
-  data(){
-    return {
-      steps:[
-        {
-          title:"环境检测",
-          sort: 0
-        },
-        {
-          title:"配置信息",
-          sort: 0
-        },
-        {
-          title:"waitting",
-          sort: 0
-        },
-        {
-          title:"环境检测",
-          sort: 0
-        },
-        {
-          title:"配置信息",
-          sort: 0
-        },
-        {
-          title:"waitting",
-          sort: 0
-        }
-      ],
-      current_step:0,
-    }
-  },
-}
+<script setup name="Layout">
+import {useStore} from "@/stores/store";
+
+const store = useStore();
+
+const  steps=[
+    {
+      title:"环境检测",
+      sort: 0
+    },
+    {
+      title:"配置信息",
+      sort: 0
+    },
+    {
+      title:"项目初始化",
+      sort: 0
+    },
+    {
+      title:"初始化成功",
+      sort: 0
+    },
+
+  ]
+
 </script>
 
 <style scoped>
