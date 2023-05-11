@@ -8,6 +8,7 @@ const router = createRouter({
       path: '/',
       name: 'home',
       component: Layout,
+      redirect:"check",
       children:[
         {
           path: 'check',
@@ -31,6 +32,7 @@ const router = createRouter({
         },
       ]
     },
+    { path:  '/:pathMatch(.*)', component:()=>import("../views/404.vue")}
   ]
 })
 

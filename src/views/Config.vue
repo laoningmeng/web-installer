@@ -40,7 +40,7 @@
 
 <script>
 import { defineComponent, reactive } from 'vue';
-import {useStore} from '@/stores/store';
+
 export default ({
   setup() {
     const layout = {
@@ -86,10 +86,7 @@ export default ({
     };
   },
   mounted() {
-    console.log("im in mounted")
-    const store = useStore();
-    store.setCurStep(2)
-    console.log(store.current_step)
+    this.$emit("current_step", 1)
   }
 });
 </script>

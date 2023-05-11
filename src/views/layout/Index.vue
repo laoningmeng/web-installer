@@ -7,13 +7,13 @@
       <a-card  :bordered="false"  style="padding: 20px;">
         <div :style="{ background: '#fff', minHeight: '100px'}" aclass="height-100">
           <a-row type="flex" justify="space-around" style="margin-top:20px">
-            <a-steps :current="store.current_step">
+            <a-steps :current="current_step">
               <a-step v-for="step in steps" :title="step.title"  />
             </a-steps>
           </a-row>
         </div>
         <div>
-          <router-view :key="key" />
+          <router-view :key="key" @current_step="changeStep" />
         </div>
       </a-card>
 
@@ -24,30 +24,31 @@
   </a-layout>
 </template>
 
-<script setup name="Layout">
-import {useStore} from "@/stores/store";
+<script>
+import {getStepList} from '@/api/data'
 
-const store = useStore();
-
-const  steps=[
-    {
-      title:"环境检测",
-      sort: 0
+export default {
+  data(){
+    return {
+      steps:[],
+      current_step:0,
+    }
+  },
+  mounted() {
+    this.getList()
+  },
+  methods:{
+    getList(){
+      getStepList().then(res=>{
+        this.steps = res.data
+        this.current_step= res.current_step
+      })
     },
-    {
-      title:"配置信息",
-      sort: 0
-    },
-    {
-      title:"项目初始化",
-      sort: 0
-    },
-    {
-      title:"初始化成功",
-      sort: 0
-    },
-
-  ]
+    changeStep(val){
+      this.current_step = val
+    }
+  }
+}
 
 </script>
 
