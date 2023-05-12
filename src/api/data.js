@@ -14,3 +14,11 @@ export function getCheckList(query) {
         params: query
     })
 }
+
+export function saveConfig(data) {
+    return request({
+        url: '/config/save',
+        method: 'post',
+        data
+    })
+}

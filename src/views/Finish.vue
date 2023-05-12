@@ -12,9 +12,7 @@
 </template>
 
 <script setup name="finish">
-import {useStore} from "@/stores/store";
-const store = useStore()
-store.setCurStep(3)
+
 </script>
 
 <style scoped>

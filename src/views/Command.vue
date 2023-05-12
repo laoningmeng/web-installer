@@ -1,46 +1,55 @@
 <template>
   <div>
-    <div class="terminal-print">
-      hello<br>
-      hello<br>
-      hello<br>
-      hello<br>
+    <div class="terminal-print" ref="scrollContainer">
+      <p v-for="text in texts" :key="text"  >{{ text }}</p>
     </div>
     <div class="process">
-      <a-progress :percent="70" size="small"   />
+      <a-progress :percent="data_percent" size="small"   />
+    </div>
+    <div style="margin-top: 20px;text-align: center">
+      <a-button type="primary" html-type="submit" @click="run">开始执行</a-button>
+      <a-button style="margin-left: 20px" html-type="submit">下一步</a-button>
     </div>
   </div>
 </template>
 
-<script setup name="command">
-import {useStore} from "@/stores/store";
-const store = useStore()
-store.setCurStep(2)
-let socket = new WebSocket("ws://127.0.0.1:8100/ws");
+<script>
+export default {
+  data(){
+    return {
+      data_percent:0,
+      texts:[],
+      ws:null,
+    }
+  },
+  created() {
+    // 创建 WebSocket 连接
+    const ws_url = import.meta.env.VITE_APP_WS
+    this.ws = new WebSocket(ws_url)
+  },
+  mounted() {
+    this.ws.addEventListener('message', event => {
+      const message = event.data
+      this.texts.push(message)
+      this.$nextTick(() => {
+        this.$refs.scrollContainer.scrollTop = this.$refs.scrollContainer.offsetHeight;
+      });
+    })
 
-socket.onopen = function(e) {
-  alert("[open] Connection established");
-  alert("Sending to server");
-  socket.send("My name is John");
-};
+    this.ws.addEventListener('onopen', event => {
+      this.ws.send("start ws")
+    })
+    this.ws.addEventListener('onclose', event => {
 
-socket.onmessage = function(event) {
-  alert(`[message] Data received from server: ${event.data}`);
-};
+    })
 
-socket.onclose = function(event) {
-  if (event.wasClean) {
-    alert(`[close] Connection closed cleanly, code=${event.code} reason=${event.reason}`);
-  } else {
-    // 例如服务器进程被杀死或网络中断
-    // 在这种情况下，event.code 通常为 1006
-    alert('[close] Connection died');
+  },
+  methods:{
+    run(){
+      this.ws.send("start");
+    },
   }
-};
-
-socket.onerror = function(error) {
-  alert(`[error] ${error.message}`);
-};
+}
 
 </script>
 

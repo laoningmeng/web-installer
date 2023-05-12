@@ -1,94 +1,83 @@
 <template>
-  <div style="text-align: left">
-    <a-form
-        :model="formState"
-        v-bind="layout"
-        name="nest-messages"
-        :label-col="labelCol"
-        :validate-messages="validateMessages"
-        @finish="onFinish"
+  <a-form
+      :model="mysql"
+      name="mysql"
+      :label-col="{ span: 4 }"
+      :wrapper-col="{ span: 16 }"
+      autocomplete="off"
+      @finish="onFinish"
+      @finishFailed="onFinishFailed"
+  >
+    <a-form-item
+        label="Host"
+        name="host"
+        :rules="[{ required: true, message: 'Please input your host!' }]"
     >
-      <a-form-item :name="['user', 'name']" label="Name" :rules="[{ required: true }]" >
-        <a-input v-model:value="formState.user.name" />
-      </a-form-item>
-      <a-form-item :name="['user', 'email']" label="Email" :rules="[{ type: 'email' }]">
-        <a-input v-model:value="formState.user.email" />
-      </a-form-item>
-      <a-form-item :name="['user', 'age']" label="Age" :rules="[{ type: 'number', min: 0, max: 99 }]">
-        <a-input-number v-model:value="formState.user.age" />
-      </a-form-item>
-      <a-form-item :name="['user', 'website']" label="Website">
-        <a-input v-model:value="formState.user.website" />
-      </a-form-item>
-      <a-form-item :name="['user', 'introduction']" label="Introduction">
-        <a-textarea v-model:value="formState.user.introduction" />
-      </a-form-item>
-      <a-form-item :wrapper-col="{ ...layout.wrapperCol, offset: 8 }">
-        <a-row >
-          <a-col>
-            <a-button type="primary" html-type="submit" style="margin-right: 10px">保存</a-button>
-          </a-col>
-          <a-col>
-            <a-button style="margin-left: 10px">取消</a-button>
-          </a-col>
-        </a-row>
-      </a-form-item>
-    </a-form>
-  </div>
+      <a-input v-model:value="mysql.host" />
+    </a-form-item>
+    <a-form-item
+        label="Username"
+        name="username"
+        :rules="[{ required: true, message: 'Please input your username!' }]"
+    >
+      <a-input v-model:value="mysql.username" />
+    </a-form-item>
+    <a-form-item
+        label="Password"
+        name="password"
+        :rules="[{ required: true, message: 'Please input your password!' }]"
+    >
+      <a-input-password v-model:value="mysql.password" />
+    </a-form-item>
 
+    <a-form-item
+        label="Port"
+        name="port"
+        :rules="[{ required: true, message: 'Please input your port!' }]"
+    >
+      <a-input v-model:value="mysql.port" />
+    </a-form-item>
+    <a-form-item
+        label="DBName"
+        name="db_name"
+        :rules="[{ required: true, message: 'Please input your dbname!' }]"
+    >
+      <a-input v-model:value="mysql.db_name" />
+    </a-form-item>
+
+    <a-form-item :wrapper-col="{ offset: 8, span: 16 }">
+      <a-button type="primary" html-type="submit" @click="save">安装</a-button>
+      <a-button style="margin-left: 20px" html-type="submit">取消</a-button>
+    </a-form-item>
+  </a-form>
 </template>
 
 <script>
-import { defineComponent, reactive } from 'vue';
+import {saveConfig} from "@/api/data";
 
-export default ({
-  setup() {
-    const layout = {
-      labelCol: {
-        span: 8,
-      },
-      wrapperCol: {
-        span: 16,
-      },
-    };
-    const validateMessages = {
-      required: '${label} is required!',
-      types: {
-        email: '${label} is not a valid email!',
-        number: '${label} is not a valid number!',
-      },
-      number: {
-        range: '${label} must be between ${min} and ${max}',
-      },
-    };
-    const formState = reactive({
-      user: {
-        name: '',
-        age: undefined,
-        email: '',
-        website: '',
-        introduction: '',
-      },
-    });
-    const onFinish = values => {
-      console.log('Success:', values);
-    };
+export  default {
+  data(){
     return {
-      formState,
-      onFinish,
-      layout,
-      validateMessages,
-      labelCol: {
-        style: {
-          width: '150px',
-        },
-      },
-    };
+      mysql:{}
+    }
+  },
+  methods:{
+    save(){
+      saveConfig(this.mysql).then(res=>{
+        console.log("res:", res)
+      })
+    },
+    onFinish(){
+      this.$router.push("/command")
+    },
+    onFinishFailed(){
+
+    }
   },
   mounted() {
     this.$emit("current_step", 1)
   }
-});
+}
 </script>
 
 
