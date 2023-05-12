@@ -28,6 +28,7 @@ export default {
     this.ws = new WebSocket(ws_url)
   },
   mounted() {
+    this.$emit("current_step", 2)
     this.ws.addEventListener('message', event => {
       const message = event.data
       this.texts.push(message)

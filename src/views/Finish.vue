@@ -11,7 +11,17 @@
   </a-result>
 </template>
 
-<script setup name="finish">
+<script>
+export default {
+  data(){
+    return {
+
+    }
+  },
+  mounted() {
+    this.$emit("current_step", 3)
+  }
+}
 
 </script>
 
